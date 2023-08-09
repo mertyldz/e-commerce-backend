@@ -76,5 +76,10 @@ public class AddressMapper implements IBaseMapper<AddressDTO, AddressEntity, Add
         return addressEntity;
     }
 
+    @Override
+    public List<AddressEntity> requestDtoListToEntityList(List<AddressRequestDTO> addressRequestDTOS) {
+        return null;
+    }
+
 
 }

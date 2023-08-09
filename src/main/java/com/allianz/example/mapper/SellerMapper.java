@@ -8,44 +8,45 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class SellerMapper implements IBaseMapper<SellerDTO, SellerEntity, SellerRequestDTO> {
     @Override
     public SellerDTO entityToDTO(SellerEntity entity) {
-        SellerDTO sellerDTO = new SellerDTO();
+        SellerDTO dto = new SellerDTO();
 
-        sellerDTO.setId(entity.getId());
-        sellerDTO.setUuid(entity.getUuid());
-        sellerDTO.setCreationDate(entity.getCreationDate());
-        sellerDTO.setUpdatedDate(entity.getUpdatedDate());
-        sellerDTO.setName(entity.getName());
-        sellerDTO.setSurname(entity.getSurname());
-        sellerDTO.setTc(entity.getTc());
-        sellerDTO.setEmail(entity.getEmail());
-        sellerDTO.setShopName(entity.getShopName());
-        sellerDTO.setTaxOffice(entity.getTaxOffice());
-        sellerDTO.setTaxNumber(entity.getTaxNumber());
+        dto.setId(entity.getId());
+        dto.setUuid(entity.getUuid());
+        dto.setCreationDate(entity.getCreationDate());
+        dto.setUpdatedDate(entity.getUpdatedDate());
+        dto.setName(entity.getName());
+        dto.setSurname(entity.getSurname());
+        dto.setTc(entity.getTc());
+        dto.setEmail(entity.getEmail());
+        dto.setShopName(entity.getShopName());
+        dto.setTaxOffice(entity.getTaxOffice());
+        dto.setTaxNumber(entity.getTaxNumber());
 
-        return sellerDTO;
+        return dto;
     }
 
     @Override
     public SellerEntity dtoToEntity(SellerDTO dto) {
-        SellerEntity sellerEntity = new SellerEntity();
+        SellerEntity entity = new SellerEntity();
 
-        sellerEntity.setId(dto.getId());
-        sellerEntity.setUuid(dto.getUuid());
-        sellerEntity.setCreationDate(dto.getCreationDate());
-        sellerEntity.setUpdatedDate(dto.getUpdatedDate());
-        sellerEntity.setName(dto.getName());
-        sellerEntity.setSurname(dto.getSurname());
-        sellerEntity.setTc(dto.getTc());
-        sellerEntity.setEmail(dto.getEmail());
-        sellerEntity.setShopName(dto.getShopName());
-        sellerEntity.setTaxOffice(dto.getTaxOffice());
-        sellerEntity.setTaxNumber(dto.getTaxNumber());
+        entity.setId(dto.getId());
+        entity.setUuid(dto.getUuid());
+        entity.setCreationDate(dto.getCreationDate());
+        entity.setUpdatedDate(dto.getUpdatedDate());
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
+        entity.setTc(dto.getTc());
+        entity.setEmail(dto.getEmail());
+        entity.setShopName(dto.getShopName());
+        entity.setTaxOffice(dto.getTaxOffice());
+        entity.setTaxNumber(dto.getTaxNumber());
 
-        return sellerEntity;
+        return entity;
     }
 
     @Override
@@ -68,20 +69,25 @@ public class SellerMapper implements IBaseMapper<SellerDTO, SellerEntity, Seller
 
     @Override
     public SellerEntity requestDTOToEntity(SellerRequestDTO dto) {
-        SellerEntity sellerEntity = new SellerEntity();
+        SellerEntity entity = new SellerEntity();
 
-        sellerEntity.setId(dto.getId());
-        sellerEntity.setUuid(dto.getUuid());
-        sellerEntity.setCreationDate(dto.getCreationDate());
-        sellerEntity.setUpdatedDate(dto.getUpdatedDate());
-        sellerEntity.setName(dto.getName());
-        sellerEntity.setSurname(dto.getSurname());
-        sellerEntity.setTc(dto.getTc());
-        sellerEntity.setEmail(dto.getEmail());
-        sellerEntity.setShopName(dto.getShopName());
-        sellerEntity.setTaxOffice(dto.getTaxOffice());
-        sellerEntity.setTaxNumber(dto.getTaxNumber());
+        entity.setId(dto.getId());
+        entity.setUuid(dto.getUuid());
+        entity.setCreationDate(dto.getCreationDate());
+        entity.setUpdatedDate(dto.getUpdatedDate());
+        entity.setName(dto.getName());
+        entity.setSurname(dto.getSurname());
+        entity.setTc(dto.getTc());
+        entity.setEmail(dto.getEmail());
+        entity.setShopName(dto.getShopName());
+        entity.setTaxOffice(dto.getTaxOffice());
+        entity.setTaxNumber(dto.getTaxNumber());
 
-        return sellerEntity;
+        return entity;
+    }
+
+    @Override
+    public List<SellerEntity> requestDtoListToEntityList(List<SellerRequestDTO> sellerRequestDTOS) {
+        return null;
     }
 }

@@ -73,4 +73,9 @@ public class TaxMapper implements IBaseMapper<TaxDTO, TaxEntity, TaxRequestDTO> 
 
         return taxEntity;
     }
+
+    @Override
+    public List<TaxEntity> requestDtoListToEntityList(List<TaxRequestDTO> taxRequestDTOS) {
+        return null;
+    }
 }

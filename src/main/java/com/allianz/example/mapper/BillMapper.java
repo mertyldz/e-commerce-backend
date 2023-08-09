@@ -4,28 +4,37 @@ import com.allianz.example.database.entity.BillEntity;
 import com.allianz.example.model.DTO.BillDTO;
 import com.allianz.example.model.requestDTO.BillRequestDTO;
 import com.allianz.example.util.IBaseMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class BillMapper implements IBaseMapper<BillDTO, BillEntity, BillRequestDTO> {
+
+    @Autowired
+    @Lazy
+    OrderMapper orderMapper;
+
     @Override
     public BillDTO entityToDTO(BillEntity entity) {
-        BillDTO billDTO = new BillDTO();
-        billDTO.setCreationDate(entity.getCreationDate());
-        billDTO.setUpdatedDate(entity.getUpdatedDate());
-        billDTO.setId(entity.getId());
-        billDTO.setUuid(entity.getUuid());
+        BillDTO dto = new BillDTO();
+        dto.setCreationDate(entity.getCreationDate());
+        dto.setUpdatedDate(entity.getUpdatedDate());
+        dto.setId(entity.getId());
+        dto.setUuid(entity.getUuid());
 
-        billDTO.setBillDate(entity.getBillDate());
-        billDTO.setBillNo(entity.getBillNo());
-        billDTO.setTaxAmount(entity.getTaxAmount());
-        billDTO.setTotalSellNetPrice(entity.getTotalSellNetPrice());
-        billDTO.setTotalSellPrice(entity.getTotalSellPrice());
-        billDTO.setTaxRate(entity.getTaxRate());
+        dto.setBillDate(entity.getBillDate());
+        dto.setBillNo(entity.getBillNo());
+        dto.setTaxRate(entity.getTaxRate());
+        dto.setTaxAmount(entity.getTaxAmount());
+        dto.setTotalSellNetPrice(entity.getTotalSellNetPrice());
+        dto.setTotalSellPrice(entity.getTotalSellPrice());
+        dto.setOrder(orderMapper.entityToDTO(entity.getOrder()));
 
-        return billDTO;
+        return dto;
     }
 
     @Override
@@ -43,6 +52,7 @@ public class BillMapper implements IBaseMapper<BillDTO, BillEntity, BillRequestD
         billEntity.setTotalSellNetPrice(dto.getTotalSellNetPrice());
         billEntity.setTotalSellPrice(dto.getTotalSellPrice());
         billEntity.setTaxRate(dto.getTaxRate());
+        billEntity.setOrder(orderMapper.dtoToEntity(dto.getOrder()));
 
         return billEntity;
     }
@@ -80,7 +90,13 @@ public class BillMapper implements IBaseMapper<BillDTO, BillEntity, BillRequestD
         billEntity.setTotalSellNetPrice(dto.getTotalSellNetPrice());
         billEntity.setTotalSellPrice(dto.getTotalSellPrice());
         billEntity.setTaxRate(dto.getTaxRate());
+        billEntity.setOrder(orderMapper.dtoToEntity(dto.getOrder()));
 
         return billEntity;
+    }
+
+    @Override
+    public List<BillEntity> requestDtoListToEntityList(List<BillRequestDTO> billRequestDTOS) {
+        return null;
     }
 }

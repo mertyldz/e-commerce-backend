@@ -15,6 +15,7 @@ public interface IBaseMapper<ResponseDTO extends BaseDTO, Entity extends BaseEnt
     List<Entity> dtoListTOEntityList(List<ResponseDTO> dtoList);
 
     Entity requestDTOToEntity(RequestDTO dto);
+    List<Entity> requestDtoListToEntityList(List<RequestDTO> requestDTOList);
 
 
 }

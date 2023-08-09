@@ -20,4 +20,6 @@ public class BillDTO extends BaseDTO {
     private BigDecimal totalSellNetPrice;
 
     private BigDecimal totalSellPrice;
+
+    private OrderDTO order;
 }

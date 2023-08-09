@@ -11,4 +11,5 @@ public class OrderItemDTO extends BaseDTO {
     private Integer quantity;
 
     private BigDecimal sellPrice;
+    private ProductDTO product;
 }

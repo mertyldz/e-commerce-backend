@@ -71,4 +71,9 @@ public class SettingsMapper implements IBaseMapper<SettingsDTO, Settings, Settin
 
         return settings;
     }
+
+    @Override
+    public List<Settings> requestDtoListToEntityList(List<SettingsRequestDTO> settingsRequestDTOS) {
+        return null;
+    }
 }

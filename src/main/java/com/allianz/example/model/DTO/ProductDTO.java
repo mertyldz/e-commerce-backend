@@ -5,6 +5,7 @@ import com.allianz.example.util.BaseDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 public class ProductDTO extends BaseDTO {
@@ -20,4 +21,9 @@ public class ProductDTO extends BaseDTO {
     private BigDecimal buyPrice;
 
     private Integer quantity;
+
+    private Set<CategoryDTO> categoryList;
+
+    private TaxDTO tax;
+
 }

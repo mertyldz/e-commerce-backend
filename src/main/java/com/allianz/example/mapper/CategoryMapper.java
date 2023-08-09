@@ -1,27 +1,37 @@
 package com.allianz.example.mapper;
 
 import com.allianz.example.database.entity.CategoryEntity;
-import com.allianz.example.model.requestDTO.CategoryCreateRequestDTO;
+import com.allianz.example.database.entity.ProductEntity;
 import com.allianz.example.model.DTO.CategoryDTO;
+import com.allianz.example.model.DTO.ProductDTO;
+import com.allianz.example.model.requestDTO.CategoryCreateRequestDTO;
 import com.allianz.example.util.IBaseMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class CategoryMapper implements IBaseMapper<CategoryDTO, CategoryEntity, CategoryCreateRequestDTO> {
-
+    @Autowired
+    ProductMapper productMapper;
 
     @Override
     public CategoryDTO entityToDTO(CategoryEntity entity) {
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName(entity.getName());
-        categoryDTO.setId(entity.getId());
-        categoryDTO.setUuid(entity.getUuid());
-        categoryDTO.setCreationDate(entity.getCreationDate());
-        categoryDTO.setUpdatedDate(entity.getUpdatedDate());
-        return categoryDTO;
+        CategoryDTO dto = new CategoryDTO();
+        dto.setName(entity.getName());
+
+        Set<ProductDTO> productDTOS = new HashSet<>(new ArrayList<>(productMapper.entityListToDTOList(new ArrayList<>(entity.getProductList()))));
+        dto.setProductList(productDTOS);
+
+        dto.setId(entity.getId());
+        dto.setUuid(entity.getUuid());
+        dto.setCreationDate(entity.getCreationDate());
+        dto.setUpdatedDate(entity.getUpdatedDate());
+        return dto;
     }
 
     @Override
@@ -32,35 +42,53 @@ public class CategoryMapper implements IBaseMapper<CategoryDTO, CategoryEntity, 
         categoryEntity.setId(dto.getId());
         categoryEntity.setUpdatedDate(dto.getUpdatedDate());
         categoryEntity.setCreationDate(dto.getCreationDate());
+
+        Set<ProductEntity> productEntities = new HashSet<>(new ArrayList<>(productMapper.dtoListTOEntityList(new ArrayList<>(dto.getProductList()))));
+        categoryEntity.setProductList(productEntities);
         return categoryEntity;
     }
 
     @Override
     public List<CategoryDTO> entityListToDTOList(List<CategoryEntity> categoryEntities) {
-        List<CategoryDTO> categoryDTOList = new ArrayList<>();
-        for (CategoryEntity category : categoryEntities) {
-            categoryDTOList.add(entityToDTO(category));
+        List<CategoryDTO> DTOList = new ArrayList<>();
+
+        for (CategoryEntity entity : categoryEntities) {
+            CategoryDTO categoryDTO = entityToDTO(entity);
+            DTOList.add(categoryDTO);
         }
-        return categoryDTOList;
+
+        return DTOList;
     }
 
     @Override
     public List<CategoryEntity> dtoListTOEntityList(List<CategoryDTO> categoryDTOS) {
-        List<CategoryEntity> categoryEntityList = new ArrayList<>();
-        for (CategoryDTO categoryDTO : categoryDTOS) {
-            categoryEntityList.add(dtoToEntity(categoryDTO));
+
+        List<CategoryEntity> entities = new ArrayList<>();
+
+        for (CategoryDTO dto : categoryDTOS) {
+            CategoryEntity entity = dtoToEntity(dto);
+            entities.add(entity);
         }
-        return categoryEntityList;
+        return entities;
+
     }
 
     @Override
     public CategoryEntity requestDTOToEntity(CategoryCreateRequestDTO dto) {
-        CategoryEntity category = new CategoryEntity();
-        category.setName(dto.getName());
-        category.setUuid(dto.getUuid());
-        category.setId(dto.getId());
-        category.setUpdatedDate(dto.getUpdatedDate());
-        category.setCreationDate(dto.getCreationDate());
-        return category;
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setName(dto.getName());
+        categoryEntity.setUuid(dto.getUuid());
+        categoryEntity.setId(dto.getId());
+        categoryEntity.setUpdatedDate(dto.getUpdatedDate());
+        categoryEntity.setCreationDate(dto.getCreationDate());
+
+        Set<ProductEntity> productEntities = new HashSet<>();
+        categoryEntity.setProductList(productEntities);
+        return categoryEntity;
+    }
+
+    @Override
+    public List<CategoryEntity> requestDtoListToEntityList(List<CategoryCreateRequestDTO> categoryCreateRequestDTOS) {
+        return null;
     }
 }

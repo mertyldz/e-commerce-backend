@@ -1,10 +1,13 @@
 package com.allianz.example.model.requestDTO;
 
+import com.allianz.example.model.DTO.CategoryDTO;
+import com.allianz.example.model.DTO.TaxDTO;
 import com.allianz.example.model.enums.ColorEnum;
 import com.allianz.example.util.BaseDTO;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Data
 public class ProductRequestDTO extends BaseDTO {
@@ -20,4 +23,8 @@ public class ProductRequestDTO extends BaseDTO {
     private BigDecimal buyPrice;
 
     private Integer quantity;
+
+    private Set<CategoryDTO> categoryList;
+
+    private TaxDTO tax;
 }
