@@ -12,7 +12,7 @@ public interface ProductService<T extends BaseEntity, ResponseDTO extends BaseDT
 
     public Boolean addTaxToProduct(UUID productUUID, UUID taxUUID);
 
-    public Boolean addCategoryListToProduct(UUID productUUID, List<UUID> productUUDList);
+    public Boolean addCategoryListToProduct(UUID productUUID, List<UUID> categoryUUDList);
 
     public Boolean addCategoryToProductCategoryList(UUID productUUID, UUID categoryUUID);
 }

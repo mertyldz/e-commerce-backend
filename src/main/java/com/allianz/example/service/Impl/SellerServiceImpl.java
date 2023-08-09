@@ -5,53 +5,31 @@ import com.allianz.example.database.repository.SellerEntityRepository;
 import com.allianz.example.mapper.SellerMapper;
 import com.allianz.example.model.DTO.SellerDTO;
 import com.allianz.example.model.requestDTO.SellerRequestDTO;
-import com.allianz.example.util.IBaseService;
-import lombok.AllArgsConstructor;
+import com.allianz.example.service.SellerService;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-public class SellerServiceImpl implements IBaseService<SellerEntity, SellerDTO, SellerRequestDTO> {
-    private final SellerMapper sellerMapper;
-    private final SellerEntityRepository sellerEntityRepository;
-
-    @Override
-    public List<SellerDTO> getAll() {
-        return sellerMapper.entityListToDTOList(sellerEntityRepository.findAll());
-    }
-
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        sellerEntityRepository.deleteByUuid(uuid);
-    }
-
-    @Override
-    public SellerDTO getByUUID(UUID uuid) {
-        SellerEntity sellerEntity = sellerEntityRepository.findByUuid(uuid).orElse(null);
-        if (sellerEntity != null) {
-            return sellerMapper.entityToDTO(sellerEntity);
-        } else {
-            return null;
-        }
+public class SellerServiceImpl extends BaseServiceImpl<SellerEntity, SellerDTO, SellerRequestDTO, SellerEntityRepository, SellerMapper> implements SellerService<SellerEntity, SellerDTO, SellerRequestDTO> {
+    public SellerServiceImpl(SellerEntityRepository repository, SellerMapper mapper) {
+        super(repository, mapper);
     }
 
     @Override
     public SellerDTO create(SellerRequestDTO sellerRequestDTO) {
-        SellerEntity sellerEntity = sellerMapper.requestDTOToEntity(sellerRequestDTO);
-        sellerEntityRepository.save(sellerEntity);
-        return sellerMapper.entityToDTO(sellerEntity);
+        SellerEntity sellerEntity = mapper.requestDTOToEntity(sellerRequestDTO);
+        repository.save(sellerEntity);
+        return mapper.entityToDTO(sellerEntity);
     }
 
     @Override
     public SellerDTO updateByUUID(UUID uuid, SellerRequestDTO sellerRequestDTO) {
-        SellerEntity sellerEntity = sellerEntityRepository.findByUuid(uuid).orElse(null);
+        SellerEntity sellerEntity = repository.findByUuid(uuid).orElse(null);
         if (sellerEntity != null) {
-            sellerEntity = sellerMapper.requestDTOToEntity(sellerRequestDTO);
-            sellerEntityRepository.save(sellerEntity);
-            return sellerMapper.entityToDTO(sellerEntity);
+            sellerEntity = mapper.requestDTOToEntity(sellerRequestDTO);
+            repository.save(sellerEntity);
+            return mapper.entityToDTO(sellerEntity);
         } else {
             return null;
         }

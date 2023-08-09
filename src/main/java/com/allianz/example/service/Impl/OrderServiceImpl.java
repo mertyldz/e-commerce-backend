@@ -16,16 +16,37 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-public class OrderServiceImpl implements OrderService<OrderEntity, OrderDTO, OrderRequestDTO> {
-    private final OrderEntityRepository orderEntityRepository;
+public class OrderServiceImpl extends BaseServiceImpl<OrderEntity, OrderDTO, OrderRequestDTO, OrderEntityRepository, OrderMapper> implements OrderService<OrderEntity, OrderDTO, OrderRequestDTO> {
     private final OrderItemEntityRepository orderItemEntityRepository;
-    private final OrderMapper orderMapper;
 
+    public OrderServiceImpl(OrderEntityRepository repository, OrderMapper mapper, OrderItemEntityRepository orderItemEntityRepository) {
+        super(repository, mapper);
+        this.orderItemEntityRepository = orderItemEntityRepository;
+    }
+
+    @Override
+    public OrderDTO create(OrderRequestDTO orderRequestDTO) {
+        OrderEntity orderEntity = mapper.requestDTOToEntity(orderRequestDTO);
+        repository.save(orderEntity);
+        return mapper.entityToDTO(orderEntity);
+
+    }
+
+    @Override
+    public OrderDTO updateByUUID(UUID uuid, OrderRequestDTO orderRequestDTO) {
+        OrderEntity orderEntity = repository.findByUuid(uuid).orElse(null);
+        if (orderEntity != null) {
+            orderEntity = mapper.requestDTOToEntity(orderRequestDTO);
+            repository.save(orderEntity);
+            return mapper.entityToDTO(orderEntity);
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public Boolean addOrderItemListToOrder(UUID orderUUID, List<UUID> orderItemUUIDList) {
-        OrderEntity orderEntity = orderEntityRepository.findByUuid(orderUUID).orElse(null);
+        OrderEntity orderEntity = repository.findByUuid(orderUUID).orElse(null);
 
         if (orderEntity != null) {
 
@@ -46,18 +67,18 @@ public class OrderServiceImpl implements OrderService<OrderEntity, OrderDTO, Ord
                 }
                 orderEntity.setOrderItemList(orderItemEntityList);
             }
-            orderEntityRepository.save(orderEntity);
+            repository.save(orderEntity);
             return Boolean.TRUE;
 
         } else {
             return Boolean.FALSE;
         }
-
     }
 
     @Override
     public Boolean addOrderItemToOrder(UUID orderUUID, UUID orderItemUUID) {
-        OrderEntity orderEntity = orderEntityRepository.findByUuid(orderUUID).orElse(null);
+
+        OrderEntity orderEntity = repository.findByUuid(orderUUID).orElse(null);
         OrderItemEntity orderItemEntity = orderItemEntityRepository.findByUuid(orderItemUUID).orElse(null);
         if (orderEntity != null && orderItemEntity != null) {
             if (orderEntity.getOrderItemList() != null) {
@@ -68,50 +89,11 @@ public class OrderServiceImpl implements OrderService<OrderEntity, OrderDTO, Ord
                 orderEntity.setOrderItemList(orderItemEntityList);
 
             }
-            orderEntityRepository.save(orderEntity);
+            repository.save(orderEntity);
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
         }
     }
-
-    @Override
-    public List<OrderDTO> getAll() {
-        return orderMapper.entityListToDTOList(orderEntityRepository.findAll());
-    }
-
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        orderEntityRepository.deleteByUuid(uuid);
-    }
-
-    @Override
-    public OrderDTO getByUUID(UUID uuid) {
-        OrderEntity orderEntity = orderEntityRepository.findByUuid(uuid).orElse(null);
-        if (orderEntity != null) {
-            return orderMapper.entityToDTO(orderEntity);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public OrderDTO create(OrderRequestDTO orderRequestDTO) {
-        OrderEntity orderEntity = orderMapper.requestDTOToEntity(orderRequestDTO);
-        orderEntityRepository.save(orderEntity);
-        return orderMapper.entityToDTO(orderEntity);
-    }
-
-    @Override
-    public OrderDTO updateByUUID(UUID uuid, OrderRequestDTO orderRequestDTO) {
-        OrderEntity orderEntity = orderEntityRepository.findByUuid(uuid).orElse(null);
-        if(orderEntity != null){
-            orderEntity = orderMapper.requestDTOToEntity(orderRequestDTO);
-            orderEntityRepository.save(orderEntity);
-            return orderMapper.entityToDTO(orderEntity);
-        } else {
-            return null;
-        }
-
-    }
 }
+

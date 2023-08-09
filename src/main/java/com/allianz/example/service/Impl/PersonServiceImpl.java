@@ -18,60 +18,43 @@ import java.util.UUID;
 
 //bean
 @Service
-@AllArgsConstructor
-public class PersonServiceImpl implements PersonService<PersonEntity, PersonDTO, PersonRequestDTO> {
-
-    private final PersonEntityRepository personEntityRepository;
-    private final PersonMapper personMapper;
-
-    public List<PersonEntity> getPersonNameStartWith(String key) {
-        return personEntityRepository.findAllByNameStartingWith(key);
-    }
-
-    public List<PersonEntity> getPersonNameIContains(String key) {
-        return personEntityRepository.findAllByNameContainsIgnoreCase(key);
-    }
-
-    public List<PersonEntity> getPersonNameStartWithAndSurnameStartWith(String name, String surname) {
-        return personEntityRepository.findAllByNameStartingWithOrSurnameStartingWith(name, surname);
-    }
-
-    @Override
-    public List<PersonDTO> getAll() {
-        return personMapper.entityListToDTOList(personEntityRepository.findAll());
-    }
-
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        personEntityRepository.deleteByUuid(uuid);
-    }
-
-    @Override
-    public PersonDTO getByUUID(UUID uuid) {
-        PersonEntity personEntity = personEntityRepository.findByUuid(uuid).orElse(null);
-        if (personEntity != null) {
-            return personMapper.entityToDTO(personEntity);
-        } else {
-            return null;
-        }
+public class PersonServiceImpl extends BaseServiceImpl<PersonEntity, PersonDTO, PersonRequestDTO, PersonEntityRepository, PersonMapper> implements PersonService<PersonEntity, PersonDTO, PersonRequestDTO> {
+    public PersonServiceImpl(PersonEntityRepository repository, PersonMapper mapper) {
+        super(repository, mapper);
     }
 
     @Override
     public PersonDTO create(PersonRequestDTO personRequestDTO) {
-        PersonEntity personEntity = personMapper.requestDTOToEntity(personRequestDTO);
-        personEntityRepository.save(personEntity);
-        return personMapper.entityToDTO(personEntity);
+        PersonEntity personEntity = mapper.requestDTOToEntity(personRequestDTO);
+        repository.save(personEntity);
+        return mapper.entityToDTO(personEntity);
     }
 
     @Override
     public PersonDTO updateByUUID(UUID uuid, PersonRequestDTO personRequestDTO) {
-        PersonEntity personEntity = personEntityRepository.findByUuid(uuid).orElse(null);
+        PersonEntity personEntity = repository.findByUuid(uuid).orElse(null);
         if (personEntity != null) {
-            personEntity = personMapper.requestDTOToEntity(personRequestDTO);
-            personEntityRepository.save(personEntity);
-            return personMapper.entityToDTO(personEntity);
+            personEntity = mapper.requestDTOToEntity(personRequestDTO);
+            repository.save(personEntity);
+            return mapper.entityToDTO(personEntity);
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<PersonEntity> getPersonNameStartWith(String key) {
+        return repository.findAllByNameStartingWith(key);
+
+    }
+
+    @Override
+    public List<PersonEntity> getPersonNameIContains(String key) {
+        return repository.findAllByNameContainsIgnoreCase(key);
+    }
+
+    @Override
+    public List<PersonEntity> getPersonNameStartWithAndSurnameStartWith(String name, String surname) {
+        return repository.findAllByNameStartingWithOrSurnameStartingWith(name, surname);
     }
 }

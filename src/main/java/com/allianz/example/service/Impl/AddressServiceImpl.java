@@ -8,28 +8,24 @@ import com.allianz.example.mapper.AddressMapper;
 import com.allianz.example.model.DTO.AddressDTO;
 import com.allianz.example.model.requestDTO.AddressRequestDTO;
 import com.allianz.example.service.AddressService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-public class AddressServiceImpl implements AddressService<AddressEntity, AddressDTO, AddressRequestDTO> {
-
-    // Constructor injection
-    private final AddressEntityRepository addressEntityRepository;
+public class AddressServiceImpl extends BaseServiceImpl<AddressEntity, AddressDTO, AddressRequestDTO, AddressEntityRepository, AddressMapper> implements AddressService<AddressEntity, AddressDTO, AddressRequestDTO> {
     private final PersonEntityRepository personEntityRepository;
-    private final AddressMapper addressMapper;
 
+    public AddressServiceImpl(AddressEntityRepository repository, AddressMapper mapper, PersonEntityRepository personEntityRepository) {
+        super(repository, mapper);
+        this.addressEntityRepository = addressEntityRepository;
+    }
 
     @Override
     public Boolean addPersonToAddress(UUID addressUUID, UUID personUUID) {
-
-        AddressEntity addressEntity = addressEntityRepository.findByUuid(addressUUID).orElse(null);
+        AddressEntity addressEntity = repository.findByUuid(addressUUID).orElse(null);
         PersonEntity personEntity = personEntityRepository.findByUuid(personUUID).orElse(null);
         if (addressEntity != null && personEntity != null) {
             // Set person to address
@@ -43,7 +39,7 @@ public class AddressServiceImpl implements AddressService<AddressEntity, Address
                 addressEntityList.add(addressEntity);
                 personEntity.setAddressEntityList(addressEntityList);
             }
-            addressEntityRepository.save(addressEntity);
+            repository.save(addressEntity);
             personEntityRepository.save(personEntity);
             return Boolean.TRUE;
         }
@@ -52,44 +48,21 @@ public class AddressServiceImpl implements AddressService<AddressEntity, Address
     }
 
     @Override
-    public List<AddressDTO> getAll() {
-        List<AddressEntity> addressEntityList = addressEntityRepository.findAll();
-        return addressMapper.entityListToDTOList(addressEntityList);
-    }
-
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        addressEntityRepository.deleteByUuid(uuid);
-    }
-
-    @Override
-    public AddressDTO getByUUID(UUID uuid) {
-        Optional<AddressEntity> addressEntityOptional = addressEntityRepository.findByUuid(uuid);
-        if (addressEntityOptional.isPresent()) {
-            return addressMapper.entityToDTO(addressEntityOptional.get());
-        } else {
-            return null;
-        }
-
-    }
-
-    @Override
     public AddressDTO create(AddressRequestDTO addressRequestDTO) {
-        AddressEntity addressEntity = addressMapper.requestDTOToEntity(addressRequestDTO);
-
-        addressEntityRepository.save(addressEntity);
-
-        return addressMapper.entityToDTO(addressEntity);
+        AddressEntity addressEntity = mapper.requestDTOToEntity(addressRequestDTO);
+        repository.save(addressEntity);
+        return mapper.entityToDTO(addressEntity);
     }
 
     @Override
     public AddressDTO updateByUUID(UUID uuid, AddressRequestDTO addressRequestDTO) {
-        AddressEntity addressEntity = addressEntityRepository.findByUuid(uuid).orElse(null);
+        AddressEntity addressEntity = repository.findByUuid(uuid).orElse(null);
         if (addressEntity != null) {
-            addressEntity = addressMapper.requestDTOToEntity(addressRequestDTO);
-            addressEntityRepository.save(addressEntity);
-            return addressMapper.entityToDTO(addressEntity);
+            addressEntity = mapper.requestDTOToEntity(addressRequestDTO);
+            repository.save(addressEntity);
+            return mapper.entityToDTO(addressEntity);
         }
         return null;
     }
 }
+

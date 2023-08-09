@@ -16,19 +16,21 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
-public class BillServiceImpl implements BillService<BillEntity, BillDTO, BillRequestDTO> {
-    private final BillEntityRepository billEntityRepository;
+public class BillServiceImpl extends BaseServiceImpl<BillEntity, BillDTO, BillRequestDTO, BillEntityRepository, BillMapper> implements BillService<BillEntity, BillDTO, BillRequestDTO> {
     private final OrderEntityRepository orderEntityRepository;
-    private final BillMapper billMapper;
+
+    public BillServiceImpl(BillEntityRepository repository, BillMapper mapper, OrderEntityRepository orderEntityRepository) {
+        super(repository, mapper);
+        this.orderEntityRepository = orderEntityRepository;
+    }
 
     @Override
     public Boolean addOrderToBill(UUID orderUUID, UUID billUUID) {
-        BillEntity billEntity = billEntityRepository.findByUuid(billUUID).orElse(null);
+        BillEntity billEntity = repository.findByUuid(billUUID).orElse(null);
         OrderEntity orderEntity = orderEntityRepository.findByUuid(orderUUID).orElse(null);
         if (billEntity != null && orderEntity != null) {
             billEntity.setOrder(orderEntity);
-            billEntityRepository.save(billEntity);
+            repository.save(billEntity);
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;
@@ -36,39 +38,19 @@ public class BillServiceImpl implements BillService<BillEntity, BillDTO, BillReq
     }
 
     @Override
-    public List<BillDTO> getAll() {
-        return billMapper.entityListToDTOList(billEntityRepository.findAll());
-    }
-
-    @Override
-    public void deleteByUUID(UUID uuid) {
-        billEntityRepository.deleteByUuid(uuid);
-    }
-
-    @Override
-    public BillDTO getByUUID(UUID uuid) {
-        BillEntity billEntity = billEntityRepository.findByUuid(uuid).orElse(null);
-        if (billEntity != null) {
-            return billMapper.entityToDTO(billEntity);
-        } else {
-            return null;
-        }
-    }
-
-    @Override
     public BillDTO create(BillRequestDTO billRequestDTO) {
-        BillEntity billEntity = billMapper.requestDTOToEntity(billRequestDTO);
-        billEntityRepository.save(billEntity);
-        return billMapper.entityToDTO(billEntity);
+        BillEntity billEntity = mapper.requestDTOToEntity(billRequestDTO);
+        repository.save(billEntity);
+        return mapper.entityToDTO(billEntity);
     }
 
     @Override
     public BillDTO updateByUUID(UUID uuid, BillRequestDTO billRequestDTO) {
-        BillEntity billEntity = billEntityRepository.findByUuid(uuid).orElse(null);
+        BillEntity billEntity = repository.findByUuid(uuid).orElse(null);
         if (billEntity != null) {
-            billEntity = billMapper.requestDTOToEntity(billRequestDTO);
-            billEntityRepository.save(billEntity);
-            return billMapper.entityToDTO(billEntity);
+            billEntity = mapper.requestDTOToEntity(billRequestDTO);
+            repository.save(billEntity);
+            return mapper.entityToDTO(billEntity);
         } else {
             return null;
         }
