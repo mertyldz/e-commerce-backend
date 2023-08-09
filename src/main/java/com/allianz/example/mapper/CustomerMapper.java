@@ -1,16 +1,12 @@
 package com.allianz.example.mapper;
 
-import com.allianz.example.database.entity.AddressEntity;
 import com.allianz.example.database.entity.CustomerEntity;
-import com.allianz.example.database.entity.PersonEntity;
-import com.allianz.example.model.DTO.AddressDTO;
 import com.allianz.example.model.DTO.CustomerDTO;
-import com.allianz.example.model.DTO.PersonDTO;
 import com.allianz.example.model.requestDTO.CustomerRequestDTO;
-import com.allianz.example.model.requestDTO.PersonRequestDTO;
 import com.allianz.example.util.IBaseMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,9 +16,11 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerMapper implements IBaseMapper<CustomerDTO, CustomerEntity, CustomerRequestDTO> {
     @Autowired
+    @Lazy
     PersonMapper personMapper;
 
     @Autowired
+    @Lazy
     OrderMapper orderMapper;
 
 

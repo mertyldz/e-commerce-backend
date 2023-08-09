@@ -7,6 +7,7 @@ import com.allianz.example.model.DTO.ProductDTO;
 import com.allianz.example.model.requestDTO.ProductRequestDTO;
 import com.allianz.example.util.IBaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,7 +19,9 @@ import java.util.Set;
 public class ProductMapper implements IBaseMapper<ProductDTO, ProductEntity, ProductRequestDTO> {
     @Autowired
     TaxMapper taxMapper;
+
     @Autowired
+    @Lazy
     CategoryMapper categoryMapper;
 
 

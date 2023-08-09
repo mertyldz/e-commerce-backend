@@ -92,4 +92,9 @@ public class PersonMapper implements IBaseMapper<PersonDTO, PersonEntity, Person
 
         return personEntity;
     }
+
+    @Override
+    public List<PersonEntity> requestDtoListToEntityList(List<PersonRequestDTO> personRequestDTOS) {
+        return null;
+    }
 }
