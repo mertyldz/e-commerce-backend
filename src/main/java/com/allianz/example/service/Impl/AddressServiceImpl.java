@@ -20,7 +20,7 @@ public class AddressServiceImpl extends BaseServiceImpl<AddressEntity, AddressDT
 
     public AddressServiceImpl(AddressEntityRepository repository, AddressMapper mapper, PersonEntityRepository personEntityRepository) {
         super(repository, mapper);
-        this.addressEntityRepository = addressEntityRepository;
+        this.personEntityRepository = personEntityRepository;
     }
 
     @Override
